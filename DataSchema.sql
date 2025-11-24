@@ -5,32 +5,27 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_users_email UNIQUE (email),
-
-
-
-
     CONSTRAINT chk_users_email CHECK (email LIKE '%_@__%.__%')
 );
 
-create table locations (
-       location_id INTEGER PRIMARY KEY,
-                                                                                 loc_name VARCHAR(100) NOT NULL,
+CREATE TABLE locations (
+    location_id INTEGER PRIMARY KEY,
+    loc_name VARCHAR(100) NOT NULL,
     arch_style VARCHAR(50) NOT NULL,
-
     latitude DECIMAL(9, 6) NOT NULL,
     longitude DECIMAL(9, 6) NOT NULL,
     description VARCHAR(500)
-);CREATE TABLE routes (
-                                     route_id INTEGER PRIMARY KEY,
+);
+
+CREATE TABLE routes (
+    route_id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
     route_name VARCHAR(100) NOT NULL,
     safety_score INTEGER DEFAULT 0,
     is_clean_air BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_routes_user FOREIGN KEY (user_id) REFERENCES users (user_id),
-
-
-                                                            CONSTRAINT chk_routes_safety CHECK (safety_score BETWEEN 0 AND 100)
+    CONSTRAINT chk_routes_safety CHECK (safety_score BETWEEN 0 AND 100)
 );
 
 CREATE TABLE route_locations (
@@ -56,6 +51,6 @@ CREATE TABLE friend_requests (
     ),
     CONSTRAINT chk_fr_status CHECK (
         status IN ('pending', 'accepted', 'rejected')
-                                                         ),
+    ),
     CONSTRAINT chk_fr_diff_users CHECK (sender_id != receiver_id)
 );
