@@ -20,5 +20,4 @@ jobs:
         run: psql --version
       - name: Print MySQL Version
         run: mysql --version
-      - name: Print MongoDB Version
-        run: mongod --version
+    
