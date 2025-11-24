@@ -34,7 +34,8 @@ CREATE TABLE route_locations (
     order_seq INTEGER NOT NULL,
     CONSTRAINT pk_route_locations PRIMARY KEY (route_id, location_id),
     CONSTRAINT fk_rl_route FOREIGN KEY (route_id) REFERENCES routes (route_id),
-    CONSTRAINT fk_rl_location FOREIGN KEY (location_id) REFERENCES locations (location_id)
+    CONSTRAINT fk_rl_location FOREIGN KEY (location_id)
+    REFERENCES locations (location_id)
 );
 
 CREATE TABLE friend_requests (
