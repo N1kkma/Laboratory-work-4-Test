@@ -24,22 +24,17 @@ CREATE TABLE routes (
     safety_score INTEGER DEFAULT 0,
     is_clean_air BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_routes_user
-        FOREIGN KEY (user_id) REFERENCES users (user_id),
-    CONSTRAINT chk_routes_safety
-        CHECK (safety_score BETWEEN 0 AND 100)
+    CONSTRAINT fk_routes_user FOREIGN KEY (user_id) REFERENCES users (user_id),
+    CONSTRAINT chk_routes_safety CHECK (safety_score BETWEEN 0 AND 100)
 );
 
 CREATE TABLE route_locations (
     route_id INTEGER NOT NULL,
     location_id INTEGER NOT NULL,
     order_seq INTEGER NOT NULL,
-    CONSTRAINT pk_route_locations
-        PRIMARY KEY (route_id, location_id),
-    CONSTRAINT fk_rl_route
-        FOREIGN KEY (route_id) REFERENCES routes (route_id),
-    CONSTRAINT fk_rl_location
-        FOREIGN KEY (location_id) REFERENCES locations (location_id)
+    CONSTRAINT pk_route_locations PRIMARY KEY (route_id, location_id),
+    CONSTRAINT fk_rl_route FOREIGN KEY (route_id) REFERENCES routes (route_id),
+    CONSTRAINT fk_rl_location FOREIGN KEY (location_id) REFERENCES locations (location_id)
 );
 
 CREATE TABLE friend_requests (
@@ -48,13 +43,8 @@ CREATE TABLE friend_requests (
     receiver_id INTEGER NOT NULL,
     status VARCHAR(20) DEFAULT 'pending',
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_fr_sender
-        FOREIGN KEY (sender_id) REFERENCES users (user_id),
-    CONSTRAINT fk_fr_receiver
-        FOREIGN KEY (receiver_id) REFERENCES users (user_id),
-    CONSTRAINT chk_fr_status
-        CHECK (status IN ('pending', 'accepted', 'rejected')),
-    CONSTRAINT chk_fr_diff_users
-        CHECK (sender_id != receiver_id)
+    CONSTRAINT fk_fr_sender FOREIGN KEY (sender_id) REFERENCES users (user_id),
+    CONSTRAINT fk_fr_receiver FOREIGN KEY (receiver_id) REFERENCES users (user_id),
+    CONSTRAINT chk_fr_status CHECK (status IN ('pending', 'accepted', 'rejected')),
+    CONSTRAINT chk_fr_diff_users CHECK (sender_id != receiver_id)
 );
-
