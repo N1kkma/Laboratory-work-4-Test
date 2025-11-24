@@ -1,0 +1,24 @@
+name: Print Software Versions
+on: [push]
+
+jobs:
+  PrintLanguageVersions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Node Version
+        run: node --version
+      - name: Print Python Version
+        run: python --version
+      - name: Print Java Version
+        run: java -version
+
+  PrintDBMSVersions:
+    runs-on: ubuntu-latest
+    needs: [PrintLanguageVersions]
+    steps:
+      - name: Print PostgreSQL Version
+        run: psql --version
+      - name: Print MySQL Version
+        run: mysql --version
+      - name: Print MongoDB Version
+        run: mongod --version
