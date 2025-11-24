@@ -57,3 +57,4 @@ CREATE TABLE friend_requests (
     CONSTRAINT chk_fr_diff_users
         CHECK (sender_id != receiver_id)
 );
+
