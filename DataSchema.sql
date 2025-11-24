@@ -34,9 +34,7 @@ CREATE TABLE route_locations (
     order_seq INTEGER NOT NULL,
     CONSTRAINT pk_route_locations PRIMARY KEY (route_id, location_id),
     CONSTRAINT fk_rl_route FOREIGN KEY (route_id) REFERENCES routes (route_id),
-    CONSTRAINT fk_rl_location FOREIGN KEY (location_id) REFERENCES locations (
-        location_id
-    )
+    CONSTRAINT fk_rl_location FOREIGN KEY (location_id) REFERENCES locations (location_id)
 );
 
 CREATE TABLE friend_requests (
@@ -46,11 +44,7 @@ CREATE TABLE friend_requests (
     status VARCHAR(20) DEFAULT 'pending',
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_fr_sender FOREIGN KEY (sender_id) REFERENCES users (user_id),
-    CONSTRAINT fk_fr_receiver FOREIGN KEY (receiver_id) REFERENCES users (
-        user_id
-    ),
-    CONSTRAINT chk_fr_status CHECK (
-        status IN ('pending', 'accepted', 'rejected')
-    ),
+    CONSTRAINT fk_fr_receiver FOREIGN KEY (receiver_id) REFERENCES users (user_id),
+    CONSTRAINT chk_fr_status CHECK (status IN ('pending', 'accepted', 'rejected')),
     CONSTRAINT chk_fr_diff_users CHECK (sender_id != receiver_id)
 );
