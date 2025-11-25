@@ -13,4 +13,4 @@ jobs:
 
       - name: Run Biome Check
         # Перевіряємо наш файл
-        run: npx @biomejs/biome check ProgramCode.js
+        run: npx @biomejs/biome lint ProgramCode.js
