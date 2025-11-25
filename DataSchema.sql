@@ -4,8 +4,20 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_users_nickname UNIQUE (nickname),
     CONSTRAINT uq_users_email UNIQUE (email),
-    CONSTRAINT chk_users_email CHECK (email LIKE '%_@__%.__%')
+    
+    /*  Email validation 
+        Pattern: alphanumeric + @ + domain + . + extension
+    */
+    CONSTRAINT chk_users_email 
+        CHECK (email SIMILAR TO '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'),
+
+    /*  Nickname validation
+       Pattern: alphanumeric and underscore, 3-50 chars
+    */
+    CONSTRAINT chk_users_nickname 
+        CHECK (nickname SIMILAR TO '[a-zA-Z0-9_]{3,50}')
 );
 
 CREATE TABLE locations (
@@ -14,7 +26,19 @@ CREATE TABLE locations (
     arch_style VARCHAR(50) NOT NULL,
     latitude DECIMAL(9, 6) NOT NULL,
     longitude DECIMAL(9, 6) NOT NULL,
-    description VARCHAR(500)
+    description VARCHAR(500),
+    
+    /* Logical check: Latitude must be between -90 and 90 */
+    CONSTRAINT chk_loc_lat 
+        CHECK (latitude BETWEEN -90 AND 90),
+    
+    /* Logical check: Longitude must be between -180 and 180 */
+    CONSTRAINT chk_loc_lon 
+        CHECK (longitude BETWEEN -180 AND 180),
+
+    /* RegEx: Style must contain only letters and spaces (no numbers) */
+    CONSTRAINT chk_loc_style 
+        CHECK (arch_style SIMILAR TO '[a-zA-Z ]+')
 );
 
 CREATE TABLE routes (
@@ -24,17 +48,22 @@ CREATE TABLE routes (
     safety_score INTEGER DEFAULT 0,
     is_clean_air BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_routes_user FOREIGN KEY (user_id) REFERENCES users (user_id),
-    CONSTRAINT chk_routes_safety CHECK (safety_score BETWEEN 0 AND 100)
+    CONSTRAINT fk_routes_user 
+        FOREIGN KEY (user_id) REFERENCES users (user_id),
+    CONSTRAINT chk_routes_safety 
+        CHECK (safety_score BETWEEN 0 AND 100)
 );
 
 CREATE TABLE route_locations (
     route_id INTEGER NOT NULL,
     location_id INTEGER NOT NULL,
     order_seq INTEGER NOT NULL,
-    CONSTRAINT pk_route_locations PRIMARY KEY (route_id, location_id),
-    CONSTRAINT fk_rl_route FOREIGN KEY (route_id) REFERENCES routes (route_id),
-    CONSTRAINT fk_rl_location FOREIGN KEY (location_id) REFERENCES locations (location_id)
+    CONSTRAINT pk_route_locations 
+        PRIMARY KEY (route_id, location_id),
+    CONSTRAINT fk_rl_route 
+        FOREIGN KEY (route_id) REFERENCES routes (route_id),
+    CONSTRAINT fk_rl_location 
+        FOREIGN KEY (location_id) REFERENCES locations (location_id)
 );
 
 CREATE TABLE friend_requests (
@@ -43,8 +72,12 @@ CREATE TABLE friend_requests (
     receiver_id INTEGER NOT NULL,
     status VARCHAR(20) DEFAULT 'pending',
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_fr_sender FOREIGN KEY (sender_id) REFERENCES users (user_id),
-    CONSTRAINT fk_fr_receiver FOREIGN KEY (receiver_id) REFERENCES users (user_id),
-    CONSTRAINT chk_fr_status CHECK (status IN ('pending', 'accepted', 'rejected')),
-    CONSTRAINT chk_fr_diff_users CHECK (sender_id != receiver_id)
+    CONSTRAINT fk_fr_sender 
+        FOREIGN KEY (sender_id) REFERENCES users (user_id),
+    CONSTRAINT fk_fr_receiver 
+        FOREIGN KEY (receiver_id) REFERENCES users (user_id),
+    CONSTRAINT chk_fr_status 
+        CHECK (status IN ('pending', 'accepted', 'rejected')),
+    CONSTRAINT chk_fr_diff_users 
+        CHECK (sender_id != receiver_id)
 );
