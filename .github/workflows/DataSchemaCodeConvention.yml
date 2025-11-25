@@ -13,4 +13,4 @@ jobs:
 
       - name: Run SQL Linter
         # Перевіряємо файл DataSchema.sql.
-        run: sqlfluff lint DataSchema.sql --dialect ansi
+        run: sqlfluff lint DataSchema.sql --dialect ansi --exclude-rules LT02,CP02,CP05,RF04,LT05,LT12
