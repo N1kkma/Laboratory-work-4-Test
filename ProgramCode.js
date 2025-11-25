@@ -1,2 +1,2 @@
-const·name·=·"EcoArchWalk";
-console.log(`Hello·${name}`);
+const name = "EcoArchWalk";
+console.log(`Hello ${name}`);
